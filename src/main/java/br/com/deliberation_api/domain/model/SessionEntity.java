@@ -6,13 +6,13 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 public class SessionEntity {
 
     private LocalDateTime openAt;
 
     private LocalDateTime closeAt;
 
+    @Setter(AccessLevel.PUBLIC)
     private boolean closedManually;
 
     private TimeTypeEnum timeType;
@@ -26,6 +26,10 @@ public class SessionEntity {
     }
 
     public SessionEntity(TimeTypeEnum timeType, int duration) {
+        this.start(timeType, duration);
+    }
+
+    public void start(TimeTypeEnum timeType, int duration) {
         this.timeType = timeType;
         this.duration = duration;
         this.openAt = LocalDateTime.now();
@@ -34,7 +38,7 @@ public class SessionEntity {
 
 
     public boolean isAvailable() {
-        if (closedManually || openAt == null || closeAt == null) {
+        if (closedManually) {
             return false;
         }
         LocalDateTime now = LocalDateTime.now();

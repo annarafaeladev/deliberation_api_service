@@ -20,11 +20,11 @@ import java.util.List;
 public class TopicService {
 
     private final TopicRepository topicRepository;
-    private final VoteRepository voteRepository;
+    private final VoteService voteService;
 
-    public TopicService(TopicRepository topicRepository, VoteRepository voteRepository) {
+    public TopicService(TopicRepository topicRepository, VoteService voteService) {
         this.topicRepository = topicRepository;
-        this.voteRepository = voteRepository;
+        this.voteService = voteService;
     }
 
     public TopicEntity create(PautaCreateDTO dto) {
@@ -70,13 +70,39 @@ public class TopicService {
 
     public void openSession(String topicId, SessionRequestDTO sessionRequestDTO) {
         TopicEntity topic = findTopicOrThrow(topicId);
-        if (topic.isAvailable()) {
+
+        if (topic.getSession() != null) {
             throw new SessionException("Active session already exists for topicId: " + topicId);
         }
 
         SessionEntity sessionEntity = new SessionEntity(sessionRequestDTO.getTimeTypeOrDefault(), sessionRequestDTO.getDurationOrDefault());
         topic.setSession(sessionEntity);
         topicRepository.save(topic);
+    }
+
+
+    public void restartSession(String topicId, SessionRequestDTO sessionRequestDTO) {
+        TopicEntity topic = findTopicOrThrow(topicId);
+
+        if (topic.getSession() == null) {
+            throw new SessionException("Not found Session for topicId: " + topicId);
+        }
+
+        if (!topic.isAvailable()) {
+            throw new SessionException("Session no permission restart time for topicId: " + topicId);
+        }
+
+        try {
+            voteService.audit(topicId);
+
+            topic.getSession().start(
+                    sessionRequestDTO.getTimeTypeOrDefault(),
+                    sessionRequestDTO.getDurationOrDefault()
+            );
+            topicRepository.save(topic);
+        } catch (Exception ex) {
+            throw  new SessionException("Não foi possivel reiniciar a sessao");
+        }
     }
 
     public TopicEntity closeSession(String topicId) {
@@ -94,8 +120,8 @@ public class TopicService {
     public ResultResponseDTO getResult(String topicId) {
         TopicEntity topic = findTopicOrThrow(topicId);
 
-        long yesCount = voteRepository.countByTopicIdAndVote(topicId, VoteEnum.YES);
-        long noCount = voteRepository.countByTopicIdAndVote(topicId, VoteEnum.NO);
+        long yesCount = voteService.getCountByTopicIdAndVote(topicId, VoteEnum.YES);
+        long noCount = voteService.getCountByTopicIdAndVote(topicId, VoteEnum.NO);
 
         String result = (yesCount > noCount) ? "APPROVED" : (noCount > yesCount ? "REJECTED" : "DRAW");
 
@@ -103,6 +129,7 @@ public class TopicService {
         var closeAt = topic.getSession() != null ? topic.getSession().getCloseAt() : null;
         return new ResultResponseDTO(topic.getId(), topic.getTitle(), topic.getDescription(), openAt, closeAt, yesCount, noCount, result);
     }
+
 
     private TopicEntity findTopicOrThrow(String topicId) {
         return topicRepository.findById(topicId)
