@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: deliberation-api
+
+  data:
+    mongodb:
+      authentication-database: admin
+      auto-index-creation: true
+      host: localhost
+      port: 27017
+      database: deliberationapidb
+      username: admin
+      password: admin
