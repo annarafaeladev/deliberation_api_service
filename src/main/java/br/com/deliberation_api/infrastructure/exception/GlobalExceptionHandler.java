@@ -1,6 +1,6 @@
 package br.com.deliberation_api.infrastructure.exception;
 
-import br.com.deliberation_api.application.exception.*;
+import br.com.deliberation_api.shared.exception.*;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +45,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TopicNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleTopicNotFoundException(TopicNotFoundException ex) {
         return buildResponse(HttpStatus.NOT_FOUND, "Topic Not Found", ex.getMessage());
+    }
+
+    @ExceptionHandler(OptionNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleOptionNotFoundException(OptionNotFoundException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, "Option Not Found", ex.getMessage());
     }
 
     @ExceptionHandler(SessionException.class)

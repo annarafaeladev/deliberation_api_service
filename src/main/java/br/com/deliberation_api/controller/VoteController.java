@@ -1,38 +1,39 @@
 package br.com.deliberation_api.controller;
 
-import br.com.deliberation_api.application.service.VoteAuditService;
-import br.com.deliberation_api.application.service.VoteService;
+import br.com.deliberation_api.interfaces.service.TopicService;
+import br.com.deliberation_api.interfaces.service.VoteService;
+import br.com.deliberation_api.shared.exception.VoteException;
+import br.com.deliberation_api.application.service.TopicServiceImpl;
+import br.com.deliberation_api.application.service.VoteServiceImpl;
 import br.com.deliberation_api.application.dto.vote.VoteRequestDTO;
-import br.com.deliberation_api.domain.model.VoteAuditEntity;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/v1/votes")
 public class VoteController {
 
     private final VoteService voteService;
-    private final VoteAuditService voteAuditService;
+    private final TopicService topicService;
 
-    public VoteController(VoteService voteService, VoteAuditService voteAuditService) {
+
+    public VoteController(VoteService voteService, TopicService topicService) {
         this.voteService = voteService;
-        this.voteAuditService = voteAuditService;
-    }
-
-
-    @GetMapping("/audit/{topicId}")
-    public List<VoteAuditEntity> listAudit(@PathVariable String topicId) {
-        return voteAuditService.list(topicId);
+        this.topicService = topicService;
     }
 
     @PostMapping
-    public ResponseEntity<Void> vote( @RequestBody @Valid VoteRequestDTO request
+    public ResponseEntity<Void> vote(@RequestBody @Valid VoteRequestDTO request
     ) {
-        voteService.vote(request.topicId(), request.associateId(), request.vote());
+        boolean isAvailableTopic = topicService.isValidTopicSession(request.topicId());
+
+        if (!isAvailableTopic){
+            throw new VoteException("Voting session has expired");
+        }
+
+        voteService.vote(request.topicId(), request.associateId(), request.optionId(), request.vote());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
