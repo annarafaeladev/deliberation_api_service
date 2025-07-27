@@ -1,4 +1,4 @@
-package br.com.deliberation_api.application.service.dto;
+package br.com.deliberation_api.application.dto.topic;
 
 import java.time.LocalDateTime;
 

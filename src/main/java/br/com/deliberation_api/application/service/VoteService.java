@@ -1,23 +1,16 @@
 package br.com.deliberation_api.application.service;
 
-import br.com.deliberation_api.application.exception.SessionException;
 import br.com.deliberation_api.application.exception.TopicNotFoundException;
-import br.com.deliberation_api.application.service.dto.PautaCreateDTO;
-import br.com.deliberation_api.application.service.dto.ResultResponseDTO;
-import br.com.deliberation_api.application.service.dto.SessionRequestDTO;
-import br.com.deliberation_api.application.service.dto.TopicUpdateRequestDTO;
-import br.com.deliberation_api.domain.enums.VoteAuditActionEnum;
+import br.com.deliberation_api.application.exception.VoteException;
+import br.com.deliberation_api.application.exception.VoteNotFoundException;
 import br.com.deliberation_api.domain.enums.VoteEnum;
-import br.com.deliberation_api.domain.model.SessionEntity;
 import br.com.deliberation_api.domain.model.TopicEntity;
-import br.com.deliberation_api.domain.model.VoteAuditEntity;
 import br.com.deliberation_api.domain.model.VoteEntity;
-import br.com.deliberation_api.domain.repository.TopicRepository;
-import br.com.deliberation_api.domain.repository.VoteAuditRepository;
 import br.com.deliberation_api.domain.repository.VoteRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -32,10 +25,23 @@ public class VoteService {
     }
 
     public void vote(String topicId, String associateId, VoteEnum voteEnum) {
+        Optional<VoteEntity> voteExists = voteRepository.findByTopicIdAndAssociateId(topicId, associateId);
+
+        if (voteExists.isPresent()) {
+            throw new VoteException("User has already voted and cannot vote again.");
+        }
+
         VoteEntity vote = new VoteEntity(topicId, associateId, voteEnum);
         voteRepository.save(vote);
 
         voteAuditService.voteAuditCreate(vote);
+    }
+
+    public VoteEntity getByTopicIdAndAssociateId(String topicId, String associateId) {
+        return voteRepository.findByTopicIdAndAssociateId(topicId, associateId)
+                .orElseThrow(() -> new VoteNotFoundException(
+                        String.format("Vote not found for topicId [%s] and associateId [%s]", topicId, associateId)
+                ));
     }
 
     public void audit(String topicId) {

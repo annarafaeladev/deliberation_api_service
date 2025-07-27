@@ -1,10 +1,16 @@
 package br.com.deliberation_api.domain.model;
 
 import br.com.deliberation_api.domain.enums.VoteEnum;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Document(collection = "vote")
@@ -19,6 +25,14 @@ public class VoteEntity {
     private final String associateId;
 
     private final VoteEnum vote;
+
+    @CreatedDate
+    @Setter(AccessLevel.NONE)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Setter(AccessLevel.NONE)
+    private LocalDateTime updatedAt;
 
     public VoteEntity(String topicId, String associateId, VoteEnum vote) {
         this.topicId = topicId;

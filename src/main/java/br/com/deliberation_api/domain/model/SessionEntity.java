@@ -18,11 +18,13 @@ public class SessionEntity {
     private TimeTypeEnum timeType;
     private int duration;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
     public SessionEntity() {
-        this.timeType = TimeTypeEnum.MINUTE;
-        this.duration = 1;
-        this.openAt = LocalDateTime.now();
-        this.closeAt = this.timeType.addTo(this.openAt, 1);
+        this.createdAt = LocalDateTime.now();
+        this.start(TimeTypeEnum.MINUTE, 1);
     }
 
     public SessionEntity(TimeTypeEnum timeType, int duration) {
@@ -33,6 +35,7 @@ public class SessionEntity {
         this.timeType = timeType;
         this.duration = duration;
         this.openAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
         this.closeAt = this.timeType.addTo(this.openAt, duration);
     }
 
