@@ -1,12 +1,14 @@
 package br.com.deliberation_api.controller;
 
-import br.com.deliberation_api.application.service.TopicService;
+import br.com.deliberation_api.application.dto.topic.OptionResponseDTO;
+import br.com.deliberation_api.application.service.TopicServiceImpl;
 import br.com.deliberation_api.application.dto.topic.TopicCreateDTO;
-import br.com.deliberation_api.application.dto.topic.ResultResponseDTO;
 import br.com.deliberation_api.application.dto.topic.SessionRequestDTO;
 import br.com.deliberation_api.application.dto.topic.TopicUpdateDTO;
-import br.com.deliberation_api.domain.model.TopicEntity;
-import br.com.deliberation_api.domain.model.VoteEntity;
+import br.com.deliberation_api.domain.model.topic.TopicEntity;
+import br.com.deliberation_api.domain.model.option.VoteEntity;
+import br.com.deliberation_api.interfaces.service.TopicService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +25,7 @@ public class TopicController {
     }
 
     @PostMapping
-    public ResponseEntity<TopicEntity> create(@RequestBody TopicCreateDTO dto) {
+    public ResponseEntity<TopicEntity> create(@Valid @RequestBody TopicCreateDTO dto) {
         return ResponseEntity.ok(topicService.create(dto));
     }
 
@@ -33,13 +35,13 @@ public class TopicController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TopicEntity> getById(@PathVariable String id) {
-        return ResponseEntity.ok(topicService.getById(id));
+    public ResponseEntity<TopicEntity> getByTopicId(@PathVariable String id) {
+        return ResponseEntity.ok(topicService.getByTopicId(id));
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<TopicEntity> update(@PathVariable String id, @RequestBody TopicUpdateDTO request) {
+    public ResponseEntity<TopicEntity> update(@PathVariable String id, @Valid @RequestBody TopicUpdateDTO request) {
         TopicEntity updatedTopic = topicService.update(id, request);
         return ResponseEntity.ok(updatedTopic);
     }
@@ -68,14 +70,14 @@ public class TopicController {
         return ResponseEntity.ok(topicEntity);
     }
 
-    @GetMapping("/{id}/result")
-    public ResponseEntity<ResultResponseDTO> getResult(@PathVariable String id) {
-        return ResponseEntity.ok(topicService.getResult(id));
+    @GetMapping("/{id}/result/{optionId}")
+    public ResponseEntity<OptionResponseDTO> getOption(@PathVariable String id, @PathVariable String optionId) {
+        return ResponseEntity.ok(topicService.getOption(id, optionId));
     }
 
-    @GetMapping("/{topicId}/associates/{associateId}/vote")
-    public ResponseEntity<VoteEntity> getVoteByTopicAndAssociate(@PathVariable String topicId, @PathVariable String associateId) {
-        VoteEntity voteByTopicAndAssociate = topicService.getVoteByTopicAndAssociate(topicId, associateId);
+    @GetMapping("/{topicId}/associates/{associateId}/vote/{optionId}")
+    public ResponseEntity<VoteEntity> getVoteByTopicAndAssociate(@PathVariable String topicId, @PathVariable String associateId, @PathVariable String optionId) {
+        VoteEntity voteByTopicAndAssociate = topicService.getVoteByTopicAndAssociate(topicId, associateId, optionId);
         return ResponseEntity.ok(voteByTopicAndAssociate);
     }
 }

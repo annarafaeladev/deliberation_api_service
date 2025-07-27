@@ -1,9 +1,9 @@
 package br.com.deliberation_api.controller;
 
-import br.com.deliberation_api.application.service.AssociateService;
 import br.com.deliberation_api.application.dto.associate.AssociateCreateDTO;
 import br.com.deliberation_api.application.dto.associate.AssociateUpdateDTO;
-import br.com.deliberation_api.domain.model.AssociateEntity;
+import br.com.deliberation_api.domain.model.associate.AssociateEntity;
+import br.com.deliberation_api.interfaces.service.AssociateService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
