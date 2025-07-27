@@ -1,5 +1,6 @@
 package br.com.deliberation_api.domain.model;
 
+import br.com.deliberation_api.domain.enums.VoteAuditActionEnum;
 import br.com.deliberation_api.domain.enums.VoteEnum;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -7,24 +8,24 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
+@Document(collection = "vote_audit")
 @Getter
-@Document(collection = "vote")
-@CompoundIndex(name = "topic_associate_unique_idx", def = "{'topicId': 1, 'associateId': 1}", unique = true)
-public class VoteEntity {
+@Setter
+public class VoteAuditEntity {
 
     @Id
     private String id;
 
-    private final String topicId;
+    private String topicId;
+    private String associateId;
+    private VoteEnum vote;
 
-    private final String associateId;
-
-    private final VoteEnum vote;
+    private VoteAuditActionEnum action;
+    private LocalDateTime actionTimestamp;
 
     @CreatedDate
     @Setter(AccessLevel.NONE)
@@ -34,11 +35,11 @@ public class VoteEntity {
     @Setter(AccessLevel.NONE)
     private LocalDateTime updatedAt;
 
-    public VoteEntity(String topicId, String associateId, VoteEnum vote) {
-        this.topicId = topicId;
-        this.associateId = associateId;
-        this.vote = vote;
+    public VoteAuditEntity(VoteEntity voteEntity, VoteAuditActionEnum action) {
+        this.topicId = voteEntity.getTopicId();
+        this.associateId = voteEntity.getAssociateId();
+        this.vote = voteEntity.getVote();
+        this.action = action;
+        this.actionTimestamp = LocalDateTime.now();
     }
-
 }
-

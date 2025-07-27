@@ -1,4 +1,4 @@
-package br.com.deliberation_api.application.service.dto;
+package br.com.deliberation_api.application.dto.topic;
 
 import br.com.deliberation_api.domain.enums.TimeTypeEnum;
 import jakarta.validation.constraints.Max;

@@ -1,25 +1,88 @@
 package br.com.deliberation_api.application.service;
 
-import br.com.deliberation_api.application.service.dto.AssociateCreateDTO;
+import br.com.caelum.stella.validation.CPFValidator;
+import br.com.deliberation_api.application.exception.AssociateException;
+import br.com.deliberation_api.application.dto.associate.AssociateCreateDTO;
+import br.com.deliberation_api.application.dto.associate.AssociateUpdateDTO;
+import br.com.deliberation_api.application.exception.AssociateNotFoundException;
 import br.com.deliberation_api.domain.model.AssociateEntity;
 import br.com.deliberation_api.domain.repository.AssociateRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
 public class AssociateService {
 
-    private final AssociateRepository repository;
+    private final AssociateRepository associateRepository;
 
-    public AssociateService(AssociateRepository repository) {
-        this.repository = repository;
+    public AssociateService(AssociateRepository associateRepository) {
+        this.associateRepository = associateRepository;
     }
 
-    public AssociateEntity create(AssociateCreateDTO dto) {
-        AssociateEntity associado = new AssociateEntity();
-        associado.setNome(dto.getNome());
-        associado.setCpf(dto.getCpf());
-        return repository.save(associado);
+    public AssociateEntity create(AssociateCreateDTO associateCreateDTO) {
+        var document = cleanDocument(associateCreateDTO.document());
+        validateDocument(document);
+
+        AssociateEntity associate = new AssociateEntity(associateCreateDTO.name(), document);
+
+        return associateRepository.save(associate);
+    }
+
+    public List<AssociateEntity> list() {
+        return associateRepository.findAll();
+    }
+
+    public AssociateEntity getById(String associateId) {
+        return findTopicOrThrow(associateId);
+    }
+
+    public AssociateEntity update(String associateId, AssociateUpdateDTO associateUpdateDTO) {
+        AssociateEntity associate = findTopicOrThrow(associateId);
+
+        if (associateUpdateDTO.document() == null && associateUpdateDTO.name() == null) {
+            return associate;
+        }
+
+        if (associateUpdateDTO.document() != null) {
+            var document = cleanDocument(associateUpdateDTO.document());
+            validateDocument(document);
+            associate.setDocument(document);
+        }
+
+        if (associateUpdateDTO.name() != null) {
+            associate.setName(associateUpdateDTO.name());
+        }
+
+        return associateRepository.save(associate);
+    }
+
+    public void delete(String topicId) {
+        AssociateEntity topic = findTopicOrThrow(topicId);
+
+        associateRepository.delete(topic);
+    }
+
+    private AssociateEntity findTopicOrThrow(String associateId) {
+        return associateRepository.findById(associateId)
+                .orElseThrow(() -> new AssociateNotFoundException("Associate not found with id " + associateId));
+    }
+
+    private void validateDocument(String document) {
+        if (associateRepository.existsByDocument(document)) {
+            throw new AssociateException("Document already registered");
+        }
+
+        var isValidDocument = new CPFValidator();
+
+        if (!isValidDocument.invalidMessagesFor(document).isEmpty()) {
+            throw new AssociateException("Associate document invalid");
+        }
+    }
+
+    private String cleanDocument(String document) {
+        return  document.replaceAll("[.-]", "");
     }
 }
 

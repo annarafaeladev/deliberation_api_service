@@ -1,4 +1,4 @@
-package br.com.deliberation_api.application.service.dto;
+package br.com.deliberation_api.application.dto.topic;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class PautaCreateDTO {
+public class TopicCreateDTO {
 
     @NotBlank
     private String titulo;
