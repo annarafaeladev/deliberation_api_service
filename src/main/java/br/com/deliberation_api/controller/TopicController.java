@@ -70,7 +70,7 @@ public class TopicController {
         return ResponseEntity.ok(topicEntity);
     }
 
-    @GetMapping("/{id}/result/{optionId}")
+    @GetMapping("/{id}/options/{optionId}")
     public ResponseEntity<OptionResponseDTO> getOption(@PathVariable String id, @PathVariable String optionId) {
         return ResponseEntity.ok(topicService.getOption(id, optionId));
     }
