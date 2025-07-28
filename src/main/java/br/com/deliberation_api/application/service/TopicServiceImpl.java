@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class TopicServiceImpl implements TopicService {
+class TopicServiceImpl implements TopicService {
 
     private final TopicRepository topicRepository;
     private final VoteServiceImpl voteService;

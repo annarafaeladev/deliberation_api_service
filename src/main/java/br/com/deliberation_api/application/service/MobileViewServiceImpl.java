@@ -7,14 +7,16 @@ import br.com.deliberation_api.application.view.factory.*;
 import br.com.deliberation_api.domain.model.associate.AssociateEntity;
 import br.com.deliberation_api.domain.model.topic.TopicEntity;
 import br.com.deliberation_api.interfaces.service.AssociateService;
+import br.com.deliberation_api.interfaces.service.MobileViewService;
 import br.com.deliberation_api.interfaces.service.TopicService;
+import br.com.deliberation_api.interfaces.service.ViewTemplateService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
 @Service
-public class MobileViewService {
+class MobileViewServiceImpl implements MobileViewService {
 
     private final TopicService topicService;
     private final AssociateService associateService;
@@ -24,7 +26,7 @@ public class MobileViewService {
     private final OptionViewFactory optionViewFactory;
     private final ProfileDetailsViewFactory profileDetailsViewFactory;
 
-    public MobileViewService(TopicService topicService, AssociateService associateService, ViewTemplateService viewTemplateService, ListTopicViewFactory listTopicView, ListOptionViewFactory listOptionViewFactory, OptionViewFactory optionViewFactory, ProfileDetailsViewFactory profileDetailsViewFactory) {
+    public MobileViewServiceImpl(TopicService topicService, AssociateService associateService, ViewTemplateService viewTemplateService, ListTopicViewFactory listTopicView, ListOptionViewFactory listOptionViewFactory, OptionViewFactory optionViewFactory, ProfileDetailsViewFactory profileDetailsViewFactory) {
         this.topicService = topicService;
         this.associateService = associateService;
         this.viewTemplateService = viewTemplateService;
