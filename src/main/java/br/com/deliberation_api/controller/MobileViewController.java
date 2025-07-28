@@ -1,8 +1,8 @@
 package br.com.deliberation_api.controller;
 
 
-import br.com.deliberation_api.application.service.MobileViewService;
 import br.com.deliberation_api.application.view.dto.structure.ViewTemplateResponseDTO;
+import br.com.deliberation_api.interfaces.service.MobileViewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
