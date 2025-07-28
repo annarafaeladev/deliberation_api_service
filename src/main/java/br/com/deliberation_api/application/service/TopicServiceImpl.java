@@ -68,7 +68,7 @@ class TopicServiceImpl implements TopicService {
     public TopicEntity update(String topicId, TopicUpdateDTO topicUpdateDto) {
         TopicEntity topic = findTopicOrThrow(topicId);
 
-        if (topicUpdateDto.title() == null && topicUpdateDto.description() == null) {
+        if (topicUpdateDto.title() == null && topicUpdateDto.description() == null && topicUpdateDto.options() == null) {
             return topic;
         }
 
