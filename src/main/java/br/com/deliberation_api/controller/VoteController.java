@@ -3,8 +3,6 @@ package br.com.deliberation_api.controller;
 import br.com.deliberation_api.interfaces.service.TopicService;
 import br.com.deliberation_api.interfaces.service.VoteService;
 import br.com.deliberation_api.shared.exception.VoteException;
-import br.com.deliberation_api.application.service.TopicServiceImpl;
-import br.com.deliberation_api.application.service.VoteServiceImpl;
 import br.com.deliberation_api.application.dto.vote.VoteRequestDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

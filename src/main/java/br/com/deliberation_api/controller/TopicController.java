@@ -1,7 +1,6 @@
 package br.com.deliberation_api.controller;
 
 import br.com.deliberation_api.application.dto.topic.OptionResponseDTO;
-import br.com.deliberation_api.application.service.TopicServiceImpl;
 import br.com.deliberation_api.application.dto.topic.TopicCreateDTO;
 import br.com.deliberation_api.application.dto.topic.SessionRequestDTO;
 import br.com.deliberation_api.application.dto.topic.TopicUpdateDTO;
