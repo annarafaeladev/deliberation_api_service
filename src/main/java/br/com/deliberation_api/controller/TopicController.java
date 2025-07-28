@@ -8,6 +8,7 @@ import br.com.deliberation_api.domain.model.topic.TopicEntity;
 import br.com.deliberation_api.domain.model.option.VoteEntity;
 import br.com.deliberation_api.interfaces.service.TopicService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class TopicController {
 
     @PostMapping
     public ResponseEntity<TopicEntity> create(@Valid @RequestBody TopicCreateDTO dto) {
-        return ResponseEntity.ok(topicService.create(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(topicService.create(dto));
     }
 
     @GetMapping
