@@ -5,6 +5,7 @@ import br.com.deliberation_api.application.dto.associate.AssociateUpdateDTO;
 import br.com.deliberation_api.domain.model.associate.AssociateEntity;
 import br.com.deliberation_api.interfaces.service.AssociateService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class AssociateController {
     @PostMapping
     public ResponseEntity<AssociateEntity> create(@Valid @RequestBody AssociateCreateDTO dto) {
         AssociateEntity associate = associateService.create(dto);
-        return ResponseEntity.ok(associate);
+        return ResponseEntity.status(HttpStatus.CREATED).body(associate);
     }
 
     @GetMapping
