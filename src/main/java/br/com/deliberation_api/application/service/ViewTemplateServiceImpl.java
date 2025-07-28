@@ -4,6 +4,7 @@ import br.com.deliberation_api.application.view.dto.structure.ViewTemplateReques
 import br.com.deliberation_api.application.view.dto.structure.ViewTemplateResponseDTO;
 import br.com.deliberation_api.domain.model.view.ViewTemplateEntity;
 import br.com.deliberation_api.domain.repository.ViewTemplateRepository;
+import br.com.deliberation_api.interfaces.service.ViewTemplateService;
 import br.com.deliberation_api.shared.exception.ViewNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +12,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ViewTemplateService {
+class ViewTemplateServiceImpl implements ViewTemplateService {
 
     private final ViewTemplateRepository repository;
 
-    public ViewTemplateService(ViewTemplateRepository repository) {
+    public ViewTemplateServiceImpl(ViewTemplateRepository repository) {
         this.repository = repository;
     }
 

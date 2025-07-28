@@ -1,9 +1,9 @@
 package br.com.deliberation_api.controller;
 
 
-import br.com.deliberation_api.application.service.ViewTemplateService;
 import br.com.deliberation_api.application.view.dto.structure.ViewTemplateRequestDTO;
 import br.com.deliberation_api.application.view.dto.structure.ViewTemplateResponseDTO;
+import br.com.deliberation_api.interfaces.service.ViewTemplateService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
