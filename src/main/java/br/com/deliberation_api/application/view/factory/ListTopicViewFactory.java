@@ -1,7 +1,8 @@
 package br.com.deliberation_api.application.view.factory;
 
+import br.com.deliberation_api.application.view.dto.component.AbstractItemScreenDTO;
 import br.com.deliberation_api.application.view.dto.component.ButtonScreenDTO;
-import br.com.deliberation_api.application.view.dto.response.ViewMobileTopicOptionsResponseDTO;
+import br.com.deliberation_api.application.view.dto.structure.ViewTemplateResponseDTO;
 import br.com.deliberation_api.domain.model.topic.TopicEntity;
 import br.com.deliberation_api.infrastructure.config.ApiProperties;
 import org.springframework.stereotype.Component;
@@ -18,27 +19,23 @@ public class ListTopicViewFactory {
         this.apiProperties = apiProperties;
     }
 
-    public ViewMobileTopicOptionsResponseDTO build(List<TopicEntity> topics) {
+    public ViewTemplateResponseDTO build(ViewTemplateResponseDTO page, List<TopicEntity> topics) {
 
-        ViewMobileTopicOptionsResponseDTO screen = new ViewMobileTopicOptionsResponseDTO();
 
-        List<ButtonScreenDTO> items = topics.stream()
+        List<AbstractItemScreenDTO> items = topics.stream()
                 .map(topic -> {
                     ButtonScreenDTO buttonScreenDTO = new ButtonScreenDTO(
                             topic.getTitle(),
-                            String.format("%s/view/topics/%s/options", apiProperties.getBaseUrl(), topic.getId())
+                            String.format("%s/mobile/pages/{PAGE_ID}/topics/%s", apiProperties.getBaseUrl(), page.getId(), topic.getId())
                     );
                     buttonScreenDTO.setAvailable(topic.isAvailable());
                     return buttonScreenDTO;
-                })
+                }).map(item -> (AbstractItemScreenDTO) item)
                 .toList();
 
 
-        screen.setType("TOPICOS");
-        screen.setTitle("Lista de topicos");
-        screen.setText("Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
-        screen.setItems(items);
+        page.setItems(items);
 
-        return screen;
+        return page;
     }
 }

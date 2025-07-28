@@ -1,44 +1,43 @@
 package br.com.deliberation_api.controller;
 
-import br.com.deliberation_api.application.view.dto.response.ViewMobileProfileResponseDTO;
-import br.com.deliberation_api.application.view.dto.response.ViewMobileTopicFormResponseDTO;
-import br.com.deliberation_api.application.view.dto.response.ViewMobileTopicOptionsResponseDTO;
+
 import br.com.deliberation_api.application.service.MobileViewService;
+import br.com.deliberation_api.application.view.dto.structure.ViewTemplateResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/view")
+@RequestMapping("/v1/mobile")
 @RequiredArgsConstructor
 public class MobileViewController {
 
     @Autowired
     private final MobileViewService mobileViewService;
 
-    @GetMapping("/topics/form")
-    public ResponseEntity<ViewMobileTopicFormResponseDTO> getPageCreateTopic() {
-        return ResponseEntity.ok(mobileViewService.getPageCreateTopic());
+    @GetMapping("/pages/{pageId}")
+    public ResponseEntity<ViewTemplateResponseDTO> getPage(@PathVariable String pageId) {
+        return ResponseEntity.ok(mobileViewService.getPage(pageId));
     }
 
-    @GetMapping("/topics")
-    public ResponseEntity<ViewMobileTopicOptionsResponseDTO> getTopics() {
-        return ResponseEntity.ok(mobileViewService.getTopics());
+    @GetMapping("/pages/{pageId}/topics")
+    public ResponseEntity<ViewTemplateResponseDTO> getTopics(@PathVariable String pageId) {
+        return ResponseEntity.ok(mobileViewService.getTopics(pageId));
     }
 
-    @GetMapping("/topics/{topicId}/options")
-    public ResponseEntity<ViewMobileTopicOptionsResponseDTO> getPageOptions(@PathVariable String topicId) {
-        return ResponseEntity.ok(mobileViewService.getPageOptions(topicId));
+    @GetMapping("/pages/{pageId}/topics/{topicId}")
+    public ResponseEntity<ViewTemplateResponseDTO> getPageOptions(@PathVariable String pageId, @PathVariable String topicId) {
+        return ResponseEntity.ok(mobileViewService.getPageOptions(pageId, topicId));
     }
 
-    @GetMapping("/topics/{topicId}/options/{optionId}")
-    public ResponseEntity<ViewMobileTopicOptionsResponseDTO> getPageOption(@PathVariable String topicId, @PathVariable String optionId) {
-        return ResponseEntity.ok(mobileViewService.getPageOptionByOptionId(topicId, optionId));
+    @GetMapping("/pages/{pageId}/topics/{topicId}/options/{optionId}")
+    public ResponseEntity<ViewTemplateResponseDTO> getPageOption(@PathVariable String pageId,@PathVariable String topicId, @PathVariable String optionId) {
+        return ResponseEntity.ok(mobileViewService.getPageOptionByOptionId(pageId, topicId, optionId));
     }
 
-    @GetMapping("/profile/{associateId}")
-    public ResponseEntity<ViewMobileProfileResponseDTO> getProfileDetails(@PathVariable String associateId) {
-        return ResponseEntity.ok(mobileViewService.getProfilePage(associateId));
+    @GetMapping("/pages/{pageId}/profile/{associateId}")
+    public ResponseEntity<ViewTemplateResponseDTO> getProfileDetails(@PathVariable String pageId, @PathVariable String associateId) {
+        return ResponseEntity.ok(mobileViewService.getProfilePage(pageId, associateId));
     }
 }

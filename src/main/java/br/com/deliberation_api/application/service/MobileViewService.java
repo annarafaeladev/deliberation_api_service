@@ -1,9 +1,8 @@
 package br.com.deliberation_api.application.service;
 
-import br.com.deliberation_api.application.view.dto.response.ViewMobileProfileResponseDTO;
-import br.com.deliberation_api.application.view.dto.response.ViewMobileTopicFormResponseDTO;
-import br.com.deliberation_api.application.view.dto.response.ViewMobileTopicOptionsResponseDTO;
+
 import br.com.deliberation_api.application.dto.topic.OptionResponseDTO;
+import br.com.deliberation_api.application.view.dto.structure.ViewTemplateResponseDTO;
 import br.com.deliberation_api.application.view.factory.*;
 import br.com.deliberation_api.domain.model.associate.AssociateEntity;
 import br.com.deliberation_api.domain.model.topic.TopicEntity;
@@ -19,48 +18,52 @@ public class MobileViewService {
 
     private final TopicService topicService;
     private final AssociateService associateService;
-    private final CreateTopicViewFactory createTopicViewFactory;
+    private final ViewTemplateService viewTemplateService;
     private final ListTopicViewFactory listTopicView;
     private final ListOptionViewFactory listOptionViewFactory;
     private final OptionViewFactory optionViewFactory;
     private final ProfileDetailsViewFactory profileDetailsViewFactory;
 
-    public MobileViewService(TopicService topicService, AssociateService associateService, CreateTopicViewFactory createTopicViewFactory, ListTopicViewFactory listTopicView, ListOptionViewFactory listOptionViewFactory, OptionViewFactory optionViewFactory, ProfileDetailsViewFactory profileDetailsViewFactory) {
+    public MobileViewService(TopicService topicService, AssociateService associateService, ViewTemplateService viewTemplateService, ListTopicViewFactory listTopicView, ListOptionViewFactory listOptionViewFactory, OptionViewFactory optionViewFactory, ProfileDetailsViewFactory profileDetailsViewFactory) {
         this.topicService = topicService;
         this.associateService = associateService;
-        this.createTopicViewFactory = createTopicViewFactory;
+        this.viewTemplateService = viewTemplateService;
         this.listTopicView = listTopicView;
         this.listOptionViewFactory = listOptionViewFactory;
         this.optionViewFactory = optionViewFactory;
         this.profileDetailsViewFactory = profileDetailsViewFactory;
     }
 
-    public ViewMobileTopicFormResponseDTO getPageCreateTopic() {
-        return createTopicViewFactory.build();
+    public ViewTemplateResponseDTO getPage(String pageId) {
+        return viewTemplateService.findById(pageId);
     }
 
-    public ViewMobileTopicOptionsResponseDTO getTopics() {
+    public ViewTemplateResponseDTO getTopics(String pageId) {
+        ViewTemplateResponseDTO page = viewTemplateService.findById(pageId);
         List<TopicEntity> topics = topicService.list();
 
-        return listTopicView.build(topics);
+        return listTopicView.build(page, topics);
     }
 
-    public ViewMobileTopicOptionsResponseDTO getPageOptions(String topicId) {
+    public ViewTemplateResponseDTO getPageOptions(String pageId, String topicId) {
+        ViewTemplateResponseDTO page = viewTemplateService.findById(pageId);
         TopicEntity topic = topicService.getByTopicId(topicId);
 
-        return listOptionViewFactory.build(topic);
+        return listOptionViewFactory.build(page, topic);
     }
 
-    public ViewMobileTopicOptionsResponseDTO getPageOptionByOptionId(String topicId, String optionId) {
+    public ViewTemplateResponseDTO getPageOptionByOptionId(String id, String topicId, String optionId) {
+        ViewTemplateResponseDTO page = viewTemplateService.findById(id);
         OptionResponseDTO option = topicService.getOption(topicId, optionId);
 
-        return optionViewFactory.build(option);
+        return optionViewFactory.build(page, option);
     }
 
-     public ViewMobileProfileResponseDTO getProfilePage(String associateId) {
-        AssociateEntity associate = associateService.getById(associateId);
+     public ViewTemplateResponseDTO getProfilePage(String pageId, String associateId) {
+         ViewTemplateResponseDTO page = viewTemplateService.findById(pageId);
+         AssociateEntity associate = associateService.getById(associateId);
 
-        return profileDetailsViewFactory.build(associate);
+        return profileDetailsViewFactory.build(page, associate);
     }
 
 
