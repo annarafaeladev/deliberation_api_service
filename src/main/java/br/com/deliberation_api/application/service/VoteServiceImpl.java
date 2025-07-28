@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 @Service
-public class VoteServiceImpl implements VoteService {
+class VoteServiceImpl implements VoteService {
 
     private final VoteRepository voteRepository;
 

@@ -2,7 +2,7 @@ package br.com.deliberation_api.application.view.factory;
 
 import br.com.deliberation_api.application.view.dto.component.ButtonScreenDTO;
 import br.com.deliberation_api.application.view.dto.component.ItemScreenDTO;
-import br.com.deliberation_api.application.view.dto.response.ViewMobileProfileResponseDTO;
+import br.com.deliberation_api.application.view.dto.structure.ViewTemplateResponseDTO;
 import br.com.deliberation_api.shared.enums.FieldTypeEnum;
 import br.com.deliberation_api.domain.model.associate.AssociateEntity;
 import br.com.deliberation_api.infrastructure.config.ApiProperties;
@@ -20,27 +20,18 @@ public class ProfileDetailsViewFactory {
         this.apiProperties = apiProperties;
     }
 
-    public ViewMobileProfileResponseDTO build(AssociateEntity associate) {
-        ViewMobileProfileResponseDTO screen = new ViewMobileProfileResponseDTO();
-
-        screen.setType("PERFIL");
-        screen.setTitle("Perfil do usuario");
-        screen.setText("dados pessoal do usuario");
+    public ViewTemplateResponseDTO build(ViewTemplateResponseDTO page, AssociateEntity associate) {
 
         ButtonScreenDTO buttonUpdate = new ButtonScreenDTO("Atualizar",
                 String.format("%s/associates/%s", apiProperties.getBaseUrl(),associate.getId()));
 
-
-        ButtonScreenDTO buttonCancel = new ButtonScreenDTO("Cancelar");
-
-        screen.setButtonUpdate(buttonUpdate);
-        screen.setButtonCancel(buttonCancel);
+        page.setButtonOk(buttonUpdate);
 
         ItemScreenDTO itemName = new ItemScreenDTO("idNameUser", FieldTypeEnum.INPUT_TEXT, "Nome do usuario", associate.getName());
         ItemScreenDTO itemDocument = new ItemScreenDTO("idDocumentUser", FieldTypeEnum.INPUT_TEXT, "Document do usuario", associate.getDocument());
 
-        screen.setItems(List.of(itemName, itemDocument));
+        page.setItems(List.of(itemName, itemDocument));
 
-        return screen;
+        return page;
     }
 }

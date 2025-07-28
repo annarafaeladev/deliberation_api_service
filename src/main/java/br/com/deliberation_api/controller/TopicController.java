@@ -1,7 +1,6 @@
 package br.com.deliberation_api.controller;
 
 import br.com.deliberation_api.application.dto.topic.OptionResponseDTO;
-import br.com.deliberation_api.application.service.TopicServiceImpl;
 import br.com.deliberation_api.application.dto.topic.TopicCreateDTO;
 import br.com.deliberation_api.application.dto.topic.SessionRequestDTO;
 import br.com.deliberation_api.application.dto.topic.TopicUpdateDTO;
@@ -70,7 +69,7 @@ public class TopicController {
         return ResponseEntity.ok(topicEntity);
     }
 
-    @GetMapping("/{id}/result/{optionId}")
+    @GetMapping("/{id}/options/{optionId}")
     public ResponseEntity<OptionResponseDTO> getOption(@PathVariable String id, @PathVariable String optionId) {
         return ResponseEntity.ok(topicService.getOption(id, optionId));
     }

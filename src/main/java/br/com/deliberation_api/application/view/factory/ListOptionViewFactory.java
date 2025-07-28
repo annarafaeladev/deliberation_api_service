@@ -1,7 +1,8 @@
 package br.com.deliberation_api.application.view.factory;
 
+import br.com.deliberation_api.application.view.dto.component.AbstractItemScreenDTO;
 import br.com.deliberation_api.application.view.dto.component.ButtonScreenDTO;
-import br.com.deliberation_api.application.view.dto.response.ViewMobileTopicOptionsResponseDTO;
+import br.com.deliberation_api.application.view.dto.structure.ViewTemplateResponseDTO;
 import br.com.deliberation_api.domain.model.topic.TopicEntity;
 import br.com.deliberation_api.infrastructure.config.ApiProperties;
 import org.springframework.stereotype.Component;
@@ -18,17 +19,17 @@ public class ListOptionViewFactory {
         this.apiProperties = apiProperties;
     }
 
-    public ViewMobileTopicOptionsResponseDTO build(TopicEntity topic) {
-        ViewMobileTopicOptionsResponseDTO screen = new ViewMobileTopicOptionsResponseDTO();
-
-        List<ButtonScreenDTO> items = topic.getOptions().stream()
-                .map((option) -> new ButtonScreenDTO(option.getTitle(), String.format("%s/view/topics/%s/options/%s", apiProperties.getBaseUrl(), topic.getId(), option.getId())))
+    public ViewTemplateResponseDTO build(ViewTemplateResponseDTO page, TopicEntity topic) {
+        List<AbstractItemScreenDTO> items = topic.getOptions().stream()
+                .map(option -> new ButtonScreenDTO(
+                        option.getTitle(),
+                        String.format("%s/mobile/topics/%s/options/%s", apiProperties.getBaseUrl(), topic.getId(), option.getId())
+                ))
+                .map(item -> (AbstractItemScreenDTO) item)
                 .toList();
 
-        screen.setType("SELECÃO");
-        screen.setTitle("Lista de seleção");
-        screen.setItems(items);
+        page.setItems(items);
 
-        return screen;
+        return page;
     }
 }

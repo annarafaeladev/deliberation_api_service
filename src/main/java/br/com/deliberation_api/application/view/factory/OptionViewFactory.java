@@ -1,8 +1,8 @@
 package br.com.deliberation_api.application.view.factory;
 
 import br.com.deliberation_api.application.view.dto.component.ButtonScreenDTO;
-import br.com.deliberation_api.application.view.dto.response.ViewMobileTopicOptionsResponseDTO;
 import br.com.deliberation_api.application.dto.topic.OptionResponseDTO;
+import br.com.deliberation_api.application.view.dto.structure.ViewTemplateResponseDTO;
 import br.com.deliberation_api.infrastructure.config.ApiProperties;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +20,7 @@ public class OptionViewFactory {
         this.apiProperties = apiProperties;
     }
 
-    public ViewMobileTopicOptionsResponseDTO build(OptionResponseDTO option) {
-        ViewMobileTopicOptionsResponseDTO screen = new ViewMobileTopicOptionsResponseDTO();
-
+    public ViewTemplateResponseDTO build(ViewTemplateResponseDTO page, OptionResponseDTO option) {
         Map<String, Object> baseBody = new HashMap<>();
         baseBody.put("topicId", option.topicId());
         baseBody.put("optionId", option.optionId());
@@ -38,11 +36,9 @@ public class OptionViewFactory {
         ButtonScreenDTO buttonNo = new ButtonScreenDTO("Não",
                 String.format("%s/votes", apiProperties.getBaseUrl()), bodyNo);
 
-        screen.setType("OPÇÃO");
-        screen.setTitle(option.optionTitle());
-        screen.setText(option.optionDescription());
-        screen.setItems(List.of(buttonYes, buttonNo));
 
-        return screen;
+        page.setItems(List.of(buttonYes, buttonNo));
+
+        return page;
     }
 }

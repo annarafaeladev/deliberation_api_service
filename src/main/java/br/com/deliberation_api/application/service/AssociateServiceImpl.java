@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @Service
-public class AssociateServiceImpl implements AssociateService {
+class AssociateServiceImpl implements AssociateService {
 
     private final AssociateRepository associateRepository;
 
