@@ -20,11 +20,11 @@ public class SessionRequestDTO {
                 this.duration = duration;
         }
 
-        public TimeTypeEnum getTimeTypeOrDefault() {
+        public TimeTypeEnum getTimeType() {
                 return timeType != null ? timeType : TimeTypeEnum.MINUTE;
         }
 
-        public int getDurationOrDefault() {
+        public int getDuration() {
                 return duration != null ? duration : 1;
         }
 }

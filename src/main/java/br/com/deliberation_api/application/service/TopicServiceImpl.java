@@ -133,7 +133,7 @@ class TopicServiceImpl implements TopicService {
             throw new SessionException("Active session already exists for topicId: " + topicId);
         }
 
-        Session sessionEntity = new Session(sessionRequestDTO.getTimeTypeOrDefault(), sessionRequestDTO.getDurationOrDefault());
+        Session sessionEntity = new Session(sessionRequestDTO.getTimeType(), sessionRequestDTO.getDuration());
         topic.setSession(sessionEntity);
         topicRepository.save(topic);
 
@@ -154,8 +154,8 @@ class TopicServiceImpl implements TopicService {
 
         try {
             topic.getSession().start(
-                    sessionRequestDTO.getTimeTypeOrDefault(),
-                    sessionRequestDTO.getDurationOrDefault()
+                    sessionRequestDTO.getTimeType(),
+                    sessionRequestDTO.getDuration()
             );
 
             topicRepository.save(topic);
