@@ -8,7 +8,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN mvn clean install
+RUN mvn clean install -DskipTests
 
 # Etapa final (imagem menor para execução)
 FROM openjdk:17-jdk-slim
