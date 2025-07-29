@@ -18,7 +18,6 @@ Conexão de leitura:
 ```
 mongodb+srv://deliberation_user:cimJZt6SsddDzhmj@deliberationapi.hayornf.mongodb.net/deliberationapidb
 ```
-* Existem algumas collections já alimentadas no banco de dados.
 
 ### 🚀 Deploy
 Hospedado gratuitamente no Render
@@ -55,6 +54,23 @@ if (!isValidDocument.invalidMessagesFor(document).isEmpty()) {
 }
 
  ```
+
+* Existem algumas collections já alimentadas no banco de dados.
+
+## 🚀 Como rodar a aplicação localmente
+Pré-requisitos
+Java 17+
+Maven
+Docker e Docker Compose
+
+🐳 Subindo os containers com Docker
+Para iniciar os serviços necessários (MongoDB, etc), execute o seguinte comando na raiz do projeto:
+
+📁 O arquivo docker-compose.yml está localizado na pasta docker/ na raiz do projeto.
+
+`docker-compose -f docker/docker-compose.yml up -d`
+
+`mvn spring-boot:run`
 
 ## 📌 Observações Finais
 A API foi desenvolvida com foco em boas práticas, validações robustas.
