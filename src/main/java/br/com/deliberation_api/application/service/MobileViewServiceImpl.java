@@ -2,6 +2,7 @@ package br.com.deliberation_api.application.service;
 
 
 import br.com.deliberation_api.application.dto.topic.OptionResponseDTO;
+import br.com.deliberation_api.application.dto.topic.TopicResponseDTO;
 import br.com.deliberation_api.application.view.dto.structure.ViewTemplateResponseDTO;
 import br.com.deliberation_api.application.view.factory.*;
 import br.com.deliberation_api.domain.model.associate.AssociateEntity;
@@ -49,7 +50,7 @@ class MobileViewServiceImpl implements MobileViewService {
 
     public ViewTemplateResponseDTO getPageOptions(String pageId, String topicId) {
         ViewTemplateResponseDTO page = viewTemplateService.findById(pageId);
-        TopicEntity topic = topicService.getByTopicId(topicId);
+        TopicEntity topic = topicService.getById(topicId);
 
         return listOptionViewFactory.build(page, topic);
     }

@@ -105,14 +105,14 @@ class MobileViewServiceImplTest {
     @Test
     void getPageOptions_ShouldReturnBuiltView() {
         when(viewTemplateService.findById("page1")).thenReturn(dummyPage);
-        when(topicService.getByTopicId("topic1")).thenReturn(dummyTopic);
+        when(topicService.getById("topic1")).thenReturn(dummyTopic);
         when(listOptionViewFactory.build(dummyPage, dummyTopic)).thenReturn(dummyPage);
 
         ViewTemplateResponseDTO result = mobileViewService.getPageOptions("page1", "topic1");
 
         assertNotNull(result);
         verify(viewTemplateService).findById("page1");
-        verify(topicService).getByTopicId("topic1");
+        verify(topicService).getById("topic1");
         verify(listOptionViewFactory).build(dummyPage, dummyTopic);
     }
 
