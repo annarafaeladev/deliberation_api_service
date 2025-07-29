@@ -1,6 +1,7 @@
 package br.com.deliberation_api.application.service;
 
 import br.com.caelum.stella.validation.CPFValidator;
+import br.com.deliberation_api.application.dto.associate.AssociateResponseDTO;
 import br.com.deliberation_api.interfaces.service.AssociateService;
 import br.com.deliberation_api.shared.exception.AssociateException;
 import br.com.deliberation_api.application.dto.associate.AssociateCreateDTO;
@@ -11,6 +12,7 @@ import br.com.deliberation_api.domain.repository.AssociateRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -22,28 +24,40 @@ class AssociateServiceImpl implements AssociateService {
         this.associateRepository = associateRepository;
     }
 
-    public AssociateEntity create(AssociateCreateDTO associateCreateDTO) {
+    public AssociateResponseDTO create(AssociateCreateDTO associateCreateDTO) {
         var document = cleanDocument(associateCreateDTO.document());
         validateDocument(document);
 
         AssociateEntity associate = new AssociateEntity(associateCreateDTO.name(), document);
 
-        return associateRepository.save(associate);
+        AssociateEntity save = associateRepository.save(associate);
+        return new AssociateResponseDTO(save);
     }
 
-    public List<AssociateEntity> list() {
-        return associateRepository.findAll();
+    public List<AssociateResponseDTO> list() {
+        List<AssociateEntity> all = associateRepository.findAll();
+
+        return all.stream()
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
     }
+
+    public AssociateResponseDTO getTopicById(String associateId) {
+        AssociateEntity associateEntity = findTopicOrThrow(associateId);
+
+        return convertToResponseDTO(associateEntity);
+    }
+
 
     public AssociateEntity getById(String associateId) {
         return findTopicOrThrow(associateId);
     }
 
-    public AssociateEntity update(String associateId, AssociateUpdateDTO associateUpdateDTO) {
+    public AssociateResponseDTO update(String associateId, AssociateUpdateDTO associateUpdateDTO) {
         AssociateEntity associate = findTopicOrThrow(associateId);
 
         if (associateUpdateDTO.document() == null && associateUpdateDTO.name() == null) {
-            return associate;
+            return convertToResponseDTO(associate);
         }
 
         if (associateUpdateDTO.document() != null) {
@@ -56,7 +70,9 @@ class AssociateServiceImpl implements AssociateService {
             associate.setName(associateUpdateDTO.name());
         }
 
-        return associateRepository.save(associate);
+        associateRepository.save(associate);
+
+        return convertToResponseDTO(associate);
     }
 
     public void delete(String topicId) {
@@ -80,6 +96,10 @@ class AssociateServiceImpl implements AssociateService {
         if (!isValidDocument.invalidMessagesFor(document).isEmpty()) {
             throw new AssociateException("Associate document invalid");
         }
+    }
+
+    private AssociateResponseDTO convertToResponseDTO(AssociateEntity associate) {
+        return new AssociateResponseDTO(associate);
     }
 
     private String cleanDocument(String document) {
