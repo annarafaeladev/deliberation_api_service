@@ -14,7 +14,7 @@ Especificações:
 ### 🛢️ Banco de Dados
 * MongoDB (versão gratuita)
 
-Conexão de leitura:
+Para teste visual no MongoDB Compass Conexão de leitura:
 ```
 mongodb+srv://deliberation_user:cimJZt6SsddDzhmj@deliberationapi.hayornf.mongodb.net/deliberationapidb
 ```
