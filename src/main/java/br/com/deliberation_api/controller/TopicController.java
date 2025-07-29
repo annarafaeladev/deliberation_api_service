@@ -1,9 +1,7 @@
 package br.com.deliberation_api.controller;
 
-import br.com.deliberation_api.application.dto.topic.OptionResponseDTO;
-import br.com.deliberation_api.application.dto.topic.TopicCreateDTO;
-import br.com.deliberation_api.application.dto.topic.SessionRequestDTO;
-import br.com.deliberation_api.application.dto.topic.TopicUpdateDTO;
+import br.com.deliberation_api.application.dto.topic.*;
+import br.com.deliberation_api.domain.model.topic.Session;
 import br.com.deliberation_api.domain.model.topic.TopicEntity;
 import br.com.deliberation_api.domain.model.option.VoteEntity;
 import br.com.deliberation_api.interfaces.service.TopicService;
@@ -25,24 +23,24 @@ public class TopicController {
     }
 
     @PostMapping
-    public ResponseEntity<TopicEntity> create(@Valid @RequestBody TopicCreateDTO dto) {
+    public ResponseEntity<TopicResponseDTO> create(@Valid @RequestBody TopicCreateDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(topicService.create(dto));
     }
 
     @GetMapping
-    public ResponseEntity<List<TopicEntity>> list() {
-        return ResponseEntity.ok(topicService.list());
+    public ResponseEntity<List<TopicResponseDTO>> list() {
+        return ResponseEntity.ok(topicService.listTopics());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TopicEntity> getByTopicId(@PathVariable String id) {
+    public ResponseEntity<TopicResponseDTO> getByTopicId(@PathVariable String id) {
         return ResponseEntity.ok(topicService.getByTopicId(id));
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<TopicEntity> update(@PathVariable String id, @Valid @RequestBody TopicUpdateDTO request) {
-        TopicEntity updatedTopic = topicService.update(id, request);
+    public ResponseEntity<TopicResponseDTO> update(@PathVariable String id, @Valid @RequestBody TopicUpdateDTO request) {
+        TopicResponseDTO updatedTopic = topicService.update(id, request);
         return ResponseEntity.ok(updatedTopic);
     }
 
@@ -53,21 +51,21 @@ public class TopicController {
     }
 
     @PostMapping("/{id}/open-session")
-    public ResponseEntity<TopicEntity> openSession(@PathVariable String id, @RequestBody(required = false) SessionRequestDTO dto) {
-        TopicEntity topic = topicService.openSession(id, dto);
-        return ResponseEntity.ok(topic);
+    public ResponseEntity<Session> openSession(@PathVariable String id, @RequestBody(required = false) SessionRequestDTO dto) {
+        Session session = topicService.openSession(id, dto);
+        return ResponseEntity.ok(session);
     }
 
     @PatchMapping("/{id}/close-session")
-    public ResponseEntity<TopicEntity> closeSession(@PathVariable String id) {
-        TopicEntity topicEntity = topicService.closeSession(id);
-        return ResponseEntity.ok(topicEntity);
+    public ResponseEntity<Session> closeSession(@PathVariable String id) {
+        Session session = topicService.closeSession(id);
+        return ResponseEntity.ok(session);
     }
 
     @PatchMapping("/{id}/restart-session")
-    public ResponseEntity<TopicEntity> restartSession(@PathVariable String id, @RequestBody(required = false) SessionRequestDTO dto) {
-        TopicEntity topicEntity = topicService.restartSession(id, dto);
-        return ResponseEntity.ok(topicEntity);
+    public ResponseEntity<Session> restartSession(@PathVariable String id, @RequestBody(required = false) SessionRequestDTO dto) {
+        Session session = topicService.restartSession(id, dto);
+        return ResponseEntity.ok(session);
     }
 
     @GetMapping("/{id}/options/{optionId}")

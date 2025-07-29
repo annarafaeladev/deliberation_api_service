@@ -1,8 +1,8 @@
 package br.com.deliberation_api.controller;
 
 import br.com.deliberation_api.application.dto.associate.AssociateCreateDTO;
+import br.com.deliberation_api.application.dto.associate.AssociateResponseDTO;
 import br.com.deliberation_api.application.dto.associate.AssociateUpdateDTO;
-import br.com.deliberation_api.domain.model.associate.AssociateEntity;
 import br.com.deliberation_api.interfaces.service.AssociateService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,26 +22,26 @@ public class AssociateController {
     }
 
     @PostMapping
-    public ResponseEntity<AssociateEntity> create(@Valid @RequestBody AssociateCreateDTO dto) {
-        AssociateEntity associate = associateService.create(dto);
+    public ResponseEntity<AssociateResponseDTO> create(@Valid @RequestBody AssociateCreateDTO dto) {
+        AssociateResponseDTO associate = associateService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(associate);
     }
 
     @GetMapping
-    public ResponseEntity<List<AssociateEntity>> list() {
-        List<AssociateEntity> associates = associateService.list();
+    public ResponseEntity<List<AssociateResponseDTO>> list() {
+        List<AssociateResponseDTO> associates = associateService.list();
         return ResponseEntity.ok(associates);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AssociateEntity> getById(@PathVariable String id) {
-        AssociateEntity associate = associateService.getById(id);
+    public ResponseEntity<AssociateResponseDTO> getTopicById(@PathVariable String id) {
+        AssociateResponseDTO associate = associateService.getTopicById(id);
         return ResponseEntity.ok(associate);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AssociateEntity> update(@PathVariable String id, @Valid @RequestBody AssociateUpdateDTO request) {
-        AssociateEntity updatedTopic = associateService.update(id, request);
+    public ResponseEntity<AssociateResponseDTO> update(@PathVariable String id, @Valid @RequestBody AssociateUpdateDTO request) {
+        AssociateResponseDTO updatedTopic = associateService.update(id, request);
         return ResponseEntity.ok(updatedTopic);
     }
 

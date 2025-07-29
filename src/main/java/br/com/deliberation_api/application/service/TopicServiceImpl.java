@@ -1,13 +1,10 @@
 package br.com.deliberation_api.application.service;
 
-import br.com.deliberation_api.application.dto.topic.OptionResponseDTO;
+import br.com.deliberation_api.application.dto.topic.*;
 import br.com.deliberation_api.interfaces.service.TopicService;
 import br.com.deliberation_api.shared.exception.OptionNotFoundException;
 import br.com.deliberation_api.shared.exception.SessionException;
 import br.com.deliberation_api.shared.exception.TopicNotFoundException;
-import br.com.deliberation_api.application.dto.topic.TopicCreateDTO;
-import br.com.deliberation_api.application.dto.topic.SessionRequestDTO;
-import br.com.deliberation_api.application.dto.topic.TopicUpdateDTO;
 import br.com.deliberation_api.shared.enums.ResultEnum;
 import br.com.deliberation_api.domain.enums.VoteEnum;
 import br.com.deliberation_api.domain.model.associate.AssociateEntity;
@@ -38,7 +35,7 @@ class TopicServiceImpl implements TopicService {
         this.optionRepository = optionRepository;
     }
 
-    public TopicEntity create(TopicCreateDTO dto) {
+    public TopicResponseDTO create(TopicCreateDTO dto) {
         List<OptionEntity> options = dto.getOptions().stream()
                 .map(o -> new OptionEntity(o.getTitle(), o.getDescription()))
                 .collect(Collectors.toList());
@@ -48,7 +45,9 @@ class TopicServiceImpl implements TopicService {
         TopicEntity topic = new TopicEntity(dto.getTitle(), dto.getDescription());
         topic.setOptions(savedOptions);
 
-        return topicRepository.save(topic);
+        TopicEntity save = topicRepository.save(topic);
+
+        return convertToResponseDTO(save);
     }
 
 
@@ -56,7 +55,21 @@ class TopicServiceImpl implements TopicService {
         return topicRepository.findAll();
     }
 
-    public TopicEntity getByTopicId(String topicId) {
+    public List<TopicResponseDTO> listTopics() {
+        List<TopicEntity> all = topicRepository.findAll();
+
+        return all.stream()
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    public TopicResponseDTO getByTopicId(String topicId) {
+        TopicEntity topicEntity = findTopicOrThrow(topicId);
+
+        return convertToResponseDTO(topicEntity);
+    }
+
+    public  TopicEntity getById(String topicId) {
         return findTopicOrThrow(topicId);
     }
 
@@ -65,11 +78,11 @@ class TopicServiceImpl implements TopicService {
         return findTopicOrThrow(topicId).isAvailable();
     }
 
-    public TopicEntity update(String topicId, TopicUpdateDTO topicUpdateDto) {
+    public TopicResponseDTO update(String topicId, TopicUpdateDTO topicUpdateDto) {
         TopicEntity topic = findTopicOrThrow(topicId);
 
         if (topicUpdateDto.title() == null && topicUpdateDto.description() == null && topicUpdateDto.options() == null) {
-            return topic;
+            return convertToResponseDTO(topic);
         }
 
         if (topicUpdateDto.title() != null) {
@@ -97,7 +110,9 @@ class TopicServiceImpl implements TopicService {
             topic.setOptions(options);
         }
 
-        return topicRepository.save(topic);
+        TopicEntity save = topicRepository.save(topic);
+
+        return convertToResponseDTO(save);
     }
 
     public void delete(String topicId) {
@@ -111,7 +126,7 @@ class TopicServiceImpl implements TopicService {
     }
 
 
-    public TopicEntity openSession(String topicId, SessionRequestDTO sessionRequestDTO) {
+    public Session openSession(String topicId, SessionRequestDTO sessionRequestDTO) {
         TopicEntity topic = findTopicOrThrow(topicId);
 
         if (topic.getSession() != null) {
@@ -122,11 +137,11 @@ class TopicServiceImpl implements TopicService {
         topic.setSession(sessionEntity);
         topicRepository.save(topic);
 
-        return topic;
+        return sessionEntity;
     }
 
 
-    public TopicEntity restartSession(String topicId, SessionRequestDTO sessionRequestDTO) {
+    public Session restartSession(String topicId, SessionRequestDTO sessionRequestDTO) {
         TopicEntity topic = findTopicOrThrow(topicId);
 
         if (topic.getSession() == null) {
@@ -145,13 +160,13 @@ class TopicServiceImpl implements TopicService {
 
             topicRepository.save(topic);
 
-            return topic;
+            return topic.getSession();
         } catch (Exception ex) {
             throw  new SessionException("The session could not be restarted.");
         }
     }
 
-    public TopicEntity closeSession(String topicId) {
+    public Session closeSession(String topicId) {
         TopicEntity topic = findTopicOrThrow(topicId);
 
         if (!topic.isAvailable()) {
@@ -160,7 +175,9 @@ class TopicServiceImpl implements TopicService {
 
         topic.getSession().setClosedManually(true);
 
-        return topicRepository.save(topic);
+        topicRepository.save(topic);
+
+        return topic.getSession();
     }
 
     public OptionResponseDTO getOption(String topicId, String optionId) {
@@ -195,6 +212,10 @@ class TopicServiceImpl implements TopicService {
         AssociateEntity associate = associateService.getById(associateId);
 
         return voteService.getByTopicIdAndAssociateIdAndOptionId(topic.getId(), associate.getId(), option.getId());
+    }
+
+    private TopicResponseDTO convertToResponseDTO(TopicEntity topic) {
+        return new TopicResponseDTO(topic);
     }
 }
 

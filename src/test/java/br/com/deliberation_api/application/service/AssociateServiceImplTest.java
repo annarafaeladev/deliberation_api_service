@@ -1,6 +1,7 @@
 package br.com.deliberation_api.application.service;
 
 import br.com.deliberation_api.application.dto.associate.AssociateCreateDTO;
+import br.com.deliberation_api.application.dto.associate.AssociateResponseDTO;
 import br.com.deliberation_api.application.dto.associate.AssociateUpdateDTO;
 import br.com.deliberation_api.domain.model.associate.AssociateEntity;
 import br.com.deliberation_api.domain.repository.AssociateRepository;
@@ -42,7 +43,7 @@ class AssociateServiceImplTest {
         when(associateRepository.existsByDocument("26378166781")).thenReturn(false);
         when(associateRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        AssociateEntity created = associateService.create(dto);
+        AssociateResponseDTO created = associateService.create(dto);
 
         assertEquals("Anna", created.getName());
         assertEquals("26378166781", created.getDocument());
@@ -88,7 +89,7 @@ class AssociateServiceImplTest {
         associates.get(1).setId("2");
         when(associateRepository.findAll()).thenReturn(associates);
 
-        List<AssociateEntity> result = associateService.list();
+        List<AssociateResponseDTO> result = associateService.list();
 
         assertEquals(2, result.size());
         verify(associateRepository).findAll();
@@ -120,7 +121,7 @@ class AssociateServiceImplTest {
         when(associateRepository.existsByDocument("98765432100")).thenReturn(false);
         when(associateRepository.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        AssociateEntity updated = associateService.update("123", updateDTO);
+        AssociateResponseDTO updated = associateService.update("123", updateDTO);
 
         assertEquals("Anna Updated", updated.getName());
         assertEquals("98765432100", updated.getDocument());

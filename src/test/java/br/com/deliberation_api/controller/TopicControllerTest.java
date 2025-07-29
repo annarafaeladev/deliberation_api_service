@@ -1,8 +1,10 @@
 package br.com.deliberation_api.controller;
 
 import br.com.deliberation_api.application.dto.topic.*;
+import br.com.deliberation_api.domain.enums.TimeTypeEnum;
 import br.com.deliberation_api.domain.enums.VoteEnum;
 import br.com.deliberation_api.domain.model.option.VoteEntity;
+import br.com.deliberation_api.domain.model.topic.Session;
 import br.com.deliberation_api.domain.model.topic.TopicEntity;
 import br.com.deliberation_api.interfaces.service.TopicService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,6 +47,7 @@ class TopicControllerTest {
     void setup() {
         topicEntity = new TopicEntity("Sample Title", "Sample Description");
         topicEntity.setId("topicId");
+        topicEntity.setSession(new Session(TimeTypeEnum.DAY, 1));
 
         optionResponseDTO = new OptionResponseDTO(
                 "topicId", "Sample Title", "Sample description",
@@ -63,7 +66,7 @@ class TopicControllerTest {
         optionDTO.setTitle("Option title");
         optionDTO.setDescription("Description");
         TopicCreateDTO createDTO = new TopicCreateDTO("Sample Title", "Sample description", List.of(optionDTO));
-        when(topicService.create(any(TopicCreateDTO.class))).thenReturn(topicEntity);
+        when(topicService.create(any(TopicCreateDTO.class))).thenReturn(new TopicResponseDTO(topicEntity));
 
         mockMvc.perform(post("/v1/topics")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -77,19 +80,19 @@ class TopicControllerTest {
 
     @Test
     void list_ShouldReturnListOfTopics() throws Exception {
-        when(topicService.list()).thenReturn(List.of(topicEntity));
+        when(topicService.listTopics()).thenReturn(List.of(new TopicResponseDTO(topicEntity)));
 
         mockMvc.perform(get("/v1/topics"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("topicId"))
                 .andExpect(jsonPath("$[0].title").value("Sample Title"));
 
-        verify(topicService).list();
+        verify(topicService).listTopics();
     }
 
     @Test
     void getByTopicId_ShouldReturnTopic() throws Exception {
-        when(topicService.getByTopicId("topicId")).thenReturn(topicEntity);
+        when(topicService.getByTopicId("topicId")).thenReturn(new TopicResponseDTO(topicEntity));
 
         mockMvc.perform(get("/v1/topics/topicId"))
                 .andExpect(status().isOk())
@@ -107,7 +110,7 @@ class TopicControllerTest {
         updatedEntity.setTitle("Sample Title");
         updatedEntity.setDescription("Updated description");
 
-        when(topicService.update(eq("topicId"), any(TopicUpdateDTO.class))).thenReturn(updatedEntity);
+        when(topicService.update(eq("topicId"), any(TopicUpdateDTO.class))).thenReturn(new TopicResponseDTO(updatedEntity));
 
         mockMvc.perform(put("/v1/topics/topicId")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -129,24 +132,22 @@ class TopicControllerTest {
     @Test
     void openSession_ShouldReturnTopic() throws Exception {
         SessionRequestDTO dto = new SessionRequestDTO(null, null);
-        when(topicService.openSession(eq("topicId"), any())).thenReturn(topicEntity);
+        when(topicService.openSession(eq("topicId"), any())).thenReturn(topicEntity.getSession());
 
         mockMvc.perform(post("/v1/topics/topicId/open-session")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("topicId"));
+                .andExpect(status().isOk());
 
         verify(topicService).openSession(eq("topicId"), any());
     }
 
     @Test
     void closeSession_ShouldReturnTopic() throws Exception {
-        when(topicService.closeSession("topicId")).thenReturn(topicEntity);
+        when(topicService.closeSession("topicId")).thenReturn(topicEntity.getSession());
 
         mockMvc.perform(patch("/v1/topics/topicId/close-session"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("topicId"));
+                .andExpect(status().isOk());
 
         verify(topicService).closeSession("topicId");
     }
@@ -154,13 +155,12 @@ class TopicControllerTest {
     @Test
     void restartSession_ShouldReturnTopic() throws Exception {
         SessionRequestDTO dto = new SessionRequestDTO(null, null);
-        when(topicService.restartSession(eq("topicId"), any())).thenReturn(topicEntity);
+        when(topicService.restartSession(eq("topicId"), any())).thenReturn(topicEntity.getSession());
 
         mockMvc.perform(patch("/v1/topics/topicId/restart-session")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("topicId"));
+                .andExpect(status().isOk());
 
         verify(topicService).restartSession(eq("topicId"), any());
     }

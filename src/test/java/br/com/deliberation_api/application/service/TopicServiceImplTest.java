@@ -76,7 +76,7 @@ class TopicServiceImplTest {
         when(optionRepository.saveAll(anyList())).thenAnswer(invocation -> invocation.getArgument(0));
         when(topicRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        TopicEntity saved = topicService.create(dto);
+        TopicResponseDTO saved = topicService.create(dto);
 
         assertEquals("Title 1", saved.getTitle());
         assertEquals(2, saved.getOptions().size());
@@ -98,7 +98,7 @@ class TopicServiceImplTest {
     void getByTopicId_ShouldReturnTopic_WhenExists() {
         when(topicRepository.findById("topic1")).thenReturn(Optional.of(topicEntity));
 
-        TopicEntity found = topicService.getByTopicId("topic1");
+        TopicResponseDTO found = topicService.getByTopicId("topic1");
 
         assertEquals("Title 1", found.getTitle());
         verify(topicRepository).findById("topic1");
@@ -121,7 +121,7 @@ class TopicServiceImplTest {
 
         when(topicRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        TopicEntity updated = topicService.update("topic1", updateDTO);
+        TopicResponseDTO updated = topicService.update("topic1", updateDTO);
 
         assertEquals("Updated Title", updated.getTitle());
         assertEquals("Updated Description", updated.getDescription());
@@ -165,9 +165,9 @@ class TopicServiceImplTest {
 
         when(topicRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        TopicEntity result = topicService.openSession("topic1", sessionRequestDTO);
+        Session result = topicService.openSession("topic1", sessionRequestDTO);
 
-        assertNotNull(result.getSession());
+        assertNotNull(result);
         verify(topicRepository).save(topicEntity);
     }
 
@@ -190,11 +190,11 @@ class TopicServiceImplTest {
 
         when(topicRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        TopicEntity result = topicService.restartSession("topic1", sessionRequestDTO);
+        Session result = topicService.restartSession("topic1", sessionRequestDTO);
 
         verify(session).start(TimeTypeEnum.MINUTE, 1);
         verify(topicRepository).save(topicEntity);
-        assertNotNull(result.getSession());
+        assertNotNull(result);
     }
 
     @Test
@@ -221,9 +221,9 @@ class TopicServiceImplTest {
 
         when(topicRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        TopicEntity result = topicService.closeSession("topic1");
+        Session result = topicService.closeSession("topic1");
 
-        assertTrue(result.getSession().isClosedManually());
+        assertTrue(result.isClosedManually());
         verify(topicRepository).save(topicEntity);
     }
 
