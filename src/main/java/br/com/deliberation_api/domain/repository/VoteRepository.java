@@ -1,7 +1,7 @@
 package br.com.deliberation_api.domain.repository;
 
 import br.com.deliberation_api.domain.enums.VoteEnum;
-import br.com.deliberation_api.domain.model.option.VoteEntity;
+import br.com.deliberation_api.domain.model.vote.VoteEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

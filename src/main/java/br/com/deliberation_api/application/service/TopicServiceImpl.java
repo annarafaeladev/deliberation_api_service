@@ -11,7 +11,7 @@ import br.com.deliberation_api.domain.model.associate.AssociateEntity;
 import br.com.deliberation_api.domain.model.option.OptionEntity;
 import br.com.deliberation_api.domain.model.topic.TopicEntity;
 import br.com.deliberation_api.domain.model.topic.Session;
-import br.com.deliberation_api.domain.model.option.VoteEntity;
+import br.com.deliberation_api.domain.model.vote.VoteEntity;
 import br.com.deliberation_api.domain.repository.OptionRepository;
 import br.com.deliberation_api.domain.repository.TopicRepository;
 import org.springframework.stereotype.Service;
@@ -94,6 +94,7 @@ class TopicServiceImpl implements TopicService {
         }
 
         if (topicUpdateDto.options() != null) {
+            System.out.println(topicUpdateDto);
             List<OptionEntity> options = topicUpdateDto.options().stream()
                     .map(option -> {
                         OptionEntity optionUpdate = optionRepository.findById(option.getId())

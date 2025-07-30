@@ -1,4 +1,4 @@
-package br.com.deliberation_api.domain.model.option;
+package br.com.deliberation_api.domain.model.vote;
 
 import br.com.deliberation_api.domain.enums.VoteEnum;
 import lombok.AccessLevel;

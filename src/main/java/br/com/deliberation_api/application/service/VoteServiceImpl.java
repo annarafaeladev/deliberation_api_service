@@ -4,7 +4,7 @@ import br.com.deliberation_api.interfaces.service.VoteService;
 import br.com.deliberation_api.shared.exception.VoteException;
 import br.com.deliberation_api.shared.exception.VoteNotFoundException;
 import br.com.deliberation_api.domain.enums.VoteEnum;
-import br.com.deliberation_api.domain.model.option.VoteEntity;
+import br.com.deliberation_api.domain.model.vote.VoteEntity;
 import br.com.deliberation_api.domain.repository.VoteRepository;
 import org.springframework.stereotype.Service;
 

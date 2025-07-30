@@ -2,7 +2,7 @@ package br.com.deliberation_api.application.service;
 
 
 import br.com.deliberation_api.domain.enums.VoteEnum;
-import br.com.deliberation_api.domain.model.option.VoteEntity;
+import br.com.deliberation_api.domain.model.vote.VoteEntity;
 import br.com.deliberation_api.domain.repository.VoteRepository;
 import br.com.deliberation_api.shared.exception.VoteException;
 import br.com.deliberation_api.shared.exception.VoteNotFoundException;
