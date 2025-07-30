@@ -5,6 +5,14 @@ server:
 api:
   base-url: ${BASE_URL:http://localhost:8080/api/v1}
 
+mongock:
+  migration-scan-package:
+    - br.com.deliberation_api.infrastructure.database.migration
+
+logging:
+  level:
+    io.mongock: DEBUG
+
 
 spring:
   application:
@@ -21,4 +29,5 @@ spring:
   data:
     mongodb:
       auto-index-creation: true
-      uri: ${MONGODB_URI:mongodb://admin:admin@localhost:27017/deliberationapidb?authSource=admin}
+      uri: mongodb+srv://application_reder_user:yJ40ZbRZef7zWK4u@deliberationapi.hayornf.mongodb.net/deliberationapidb
+
