@@ -1,9 +1,9 @@
 # 🗳️ Deliberation API Service
 API criada para gerenciar o fluxo de votação corporativa.
 
-## 📬 Coleção Postman
-🔗 Acesse a coleção para testar os endpoints:
-https://documenter.getpostman.com/view/17818068/2sB3B7PEX1
+## 📬 Postman
+* 🧾 Coleção postman json: [Deliberation  API.postman_collection.json](../RESTful%20Deliberation%20%20API.postman_collection.json)
+* 🔗 Acesse a documentação para testar os endpoints: https://documenter.getpostman.com/view/17818068/2sB3B7PEX1
 
 Especificações:
 
