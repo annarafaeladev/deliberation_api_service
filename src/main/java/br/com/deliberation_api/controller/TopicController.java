@@ -2,8 +2,7 @@ package br.com.deliberation_api.controller;
 
 import br.com.deliberation_api.application.dto.topic.*;
 import br.com.deliberation_api.domain.model.topic.Session;
-import br.com.deliberation_api.domain.model.topic.TopicEntity;
-import br.com.deliberation_api.domain.model.option.VoteEntity;
+import br.com.deliberation_api.domain.model.vote.VoteEntity;
 import br.com.deliberation_api.interfaces.service.TopicService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

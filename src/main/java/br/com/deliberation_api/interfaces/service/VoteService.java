@@ -1,7 +1,7 @@
 package br.com.deliberation_api.interfaces.service;
 
 import br.com.deliberation_api.domain.enums.VoteEnum;
-import br.com.deliberation_api.domain.model.option.VoteEntity;
+import br.com.deliberation_api.domain.model.vote.VoteEntity;
 
 public interface VoteService {
     void vote(String topicId, String associateId, String optionId, VoteEnum voteEnum);

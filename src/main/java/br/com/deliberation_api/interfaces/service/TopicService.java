@@ -1,7 +1,7 @@
 package br.com.deliberation_api.interfaces.service;
 
 import br.com.deliberation_api.application.dto.topic.*;
-import br.com.deliberation_api.domain.model.option.VoteEntity;
+import br.com.deliberation_api.domain.model.vote.VoteEntity;
 import br.com.deliberation_api.domain.model.topic.Session;
 import br.com.deliberation_api.domain.model.topic.TopicEntity;
 

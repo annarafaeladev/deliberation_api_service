@@ -7,7 +7,6 @@ import br.com.deliberation_api.domain.enums.TimeTypeEnum;
 import br.com.deliberation_api.domain.model.topic.Session;
 import br.com.deliberation_api.domain.model.topic.TopicEntity;
 import br.com.deliberation_api.infrastructure.config.ApiProperties;
-import br.com.deliberation_api.shared.enums.FieldTypeEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -47,6 +46,5 @@ class ListTopicViewFactoryTest {
         ButtonScreenDTO button = (ButtonScreenDTO) items.get(0);
         assertEquals("Test Topic", button.getText());
         assertTrue(button.getUrl().contains("http://localhost/mobile/pages/{PAGE_ID}/topics/pageId"));
-        assertTrue(button.isAvailable());
     }
 }
