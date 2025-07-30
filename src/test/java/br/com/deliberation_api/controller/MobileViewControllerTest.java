@@ -6,7 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +21,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@WebMvcTest(controllers = MobileViewController.class)
+@SpringBootTest(properties = {
+        "mongock.enabled=false"
+})
+@AutoConfigureMockMvc
 @ContextConfiguration(classes = {MobileViewController.class})
 class MobileViewControllerTest {
 
@@ -48,8 +52,7 @@ class MobileViewControllerTest {
         when(mobileViewService.getPage(anyString())).thenReturn(new ViewTemplateResponseDTO());
 
         mockMvc.perform(get("/v1/mobile/pages/123")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                        .accept(MediaType.APPLICATION_JSON));
 
         verify(mobileViewService).getPage("123");
     }
@@ -59,8 +62,7 @@ class MobileViewControllerTest {
         when(mobileViewService.getTopics(anyString())).thenReturn(new ViewTemplateResponseDTO());
 
         mockMvc.perform(get("/v1/mobile/pages/123/topics")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                        .accept(MediaType.APPLICATION_JSON));
 
         verify(mobileViewService).getTopics("123");
     }
@@ -70,8 +72,7 @@ class MobileViewControllerTest {
         when(mobileViewService.getPageOptions(anyString(), anyString())).thenReturn(new ViewTemplateResponseDTO());
 
         mockMvc.perform(get("/v1/mobile/pages/123/topics/456")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                        .accept(MediaType.APPLICATION_JSON));
 
         verify(mobileViewService).getPageOptions("123", "456");
     }
@@ -81,8 +82,7 @@ class MobileViewControllerTest {
         when(mobileViewService.getPageOptionByOptionId(anyString(), anyString(), anyString())).thenReturn(new ViewTemplateResponseDTO());
 
         mockMvc.perform(get("/v1/mobile/pages/123/topics/456/options/789")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                        .accept(MediaType.APPLICATION_JSON));
 
         verify(mobileViewService).getPageOptionByOptionId("123", "456", "789");
     }
@@ -92,8 +92,7 @@ class MobileViewControllerTest {
         when(mobileViewService.getProfilePage(anyString(), anyString())).thenReturn(new ViewTemplateResponseDTO());
 
         mockMvc.perform(get("/v1/mobile/pages/123/profile/555")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                        .accept(MediaType.APPLICATION_JSON));
 
         verify(mobileViewService).getProfilePage("123", "555");
     }

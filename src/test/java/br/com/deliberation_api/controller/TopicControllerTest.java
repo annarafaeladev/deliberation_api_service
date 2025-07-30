@@ -3,7 +3,7 @@ package br.com.deliberation_api.controller;
 import br.com.deliberation_api.application.dto.topic.*;
 import br.com.deliberation_api.domain.enums.TimeTypeEnum;
 import br.com.deliberation_api.domain.enums.VoteEnum;
-import br.com.deliberation_api.domain.model.option.VoteEntity;
+import br.com.deliberation_api.domain.model.vote.VoteEntity;
 import br.com.deliberation_api.domain.model.topic.Session;
 import br.com.deliberation_api.domain.model.topic.TopicEntity;
 import br.com.deliberation_api.interfaces.service.TopicService;
@@ -12,7 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import org.springframework.http.MediaType;
@@ -27,7 +29,10 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(TopicController.class)
+@SpringBootTest(properties = {
+        "mongock.enabled=false"
+})
+@AutoConfigureMockMvc
 class TopicControllerTest {
 
     @Autowired
