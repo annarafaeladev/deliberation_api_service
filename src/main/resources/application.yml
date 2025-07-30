@@ -29,5 +29,5 @@ spring:
   data:
     mongodb:
       auto-index-creation: true
-      uri: mongodb+srv://application_reder_user:yJ40ZbRZef7zWK4u@deliberationapi.hayornf.mongodb.net/deliberationapidb
+      uri: ${MONGODB_URI:mongodb://admin:admin@localhost:27017/deliberationapidb?authSource=admin}
 
